@@ -34,11 +34,12 @@
 	
 ## Run in Docker Swarm
 
+
 	docker service create \
 	--name typecho_phpfpm \
 	--replicas=1 \
 	--network typecho_net \
-	liwl1iwl/typecho_phpfpm:1.1
+	liwl1iwl/typecho_phpfpm
 
 	docker service create \
 	--name typecho_nginx \
@@ -46,16 +47,11 @@
 	--publish 80:80 \
 	--publish 443:443 \
 	--network typecho_net \
-	liwl1iwl/typecho_nginx:1.1
+	liwl1iwl/typecho_nginx
 
-
-## Update
-
-	docker service update --image liwl1iwl/typecho_phpfpm:1.1 typecho_phpfpm
 
 ## Home
-
-	http://192.168.*.*
+	
 	user:admin
 	password:123123
 
