@@ -1,7 +1,7 @@
 ## Version
 	
 	PHP 7.2.17 (cli)
-	nginx version: nginx/1.15.12
+	nginx/1.15.12
 
 ## Clone Repositories
 
