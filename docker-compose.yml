@@ -1,10 +1,10 @@
 version: '3.3'
 
 services:
-  typecho_mysql:
+  mysql:
     image: mysql:5.7
     volumes:
-      - db-data:/var/lib/mysql
+      - mysql:/var/lib/mysql
     #这里的端口是方便管理
     ports:
       - "3309:3306"
@@ -17,19 +17,21 @@ services:
       placement:
         constraints: [node.role == manager]
 
-  typecho_phpfpm:
+  phpfpm:
     image: liwl1iwl/typecho_phpfpm
+    depends_on:
+      - "mysql"
     deploy:
       replicas: 2
       update_config:
         parallelism: 1
         delay: 5s
 
-  typecho_nginx:
+  nginx:
     image: liwl1iwl/typecho_nginx
     depends_on:
-      - typecho_mysql
-      - typecho_phpfpm
+      - "mysql"
+      - "phpfpm"
     ports:
       - "80:80"
       - "443:443"
@@ -40,5 +42,5 @@ services:
         delay: 5s
 
 volumes:
-  db-data:
+  mysql:
     driver: local
