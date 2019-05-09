@@ -1,17 +1,6 @@
 version: '3.3'
 
 services:
-  typecho_nginx:
-    image: liwl1iwl/typecho_nginx
-    depends_on:
-      - typecho_db
-      - typecho_phpfpm
-    ports:
-      - "80:80"
-      - "443:443"
-    deploy:
-      replicas: 2
-
   typecho_mysql:
     image: mysql:5.7
     volumes:
@@ -32,6 +21,23 @@ services:
     image: liwl1iwl/typecho_phpfpm
     deploy:
       replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 5s
+
+  typecho_nginx:
+    image: liwl1iwl/typecho_nginx
+    depends_on:
+      - typecho_mysql
+      - typecho_phpfpm
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 5s
 
 volumes:
   db-data:
