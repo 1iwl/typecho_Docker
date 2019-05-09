@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  typecho_mysql:
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: typecho
+      MYSQL_USER: typecho
+      MYSQL_PASSWORD: 123456
+
+  typecho_phpfpm:
+    image: liwl1iwl/typecho_phpfpm
+    deploy:
+      replicas: 1
+
+  typecho_nginx:
+    image: liwl1iwl/typecho_nginx
+    depends_on:
+      - typecho_phpfpm
+      - typecho_db
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      replicas: 1
+
+volumes:
+  db-data:
+    driver: local
