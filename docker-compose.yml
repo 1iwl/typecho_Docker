@@ -1,10 +1,22 @@
 version: '3.3'
 
 services:
+  typecho_nginx:
+    image: liwl1iwl/typecho_nginx
+    depends_on:
+      - typecho_db
+      - typecho_phpfpm
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      replicas: 2
+
   typecho_mysql:
     image: mysql:5.7
     volumes:
       - db-data:/var/lib/mysql
+    #这里的端口是方便管理
     ports:
       - "3309:3306"
     environment:
@@ -12,22 +24,14 @@ services:
       MYSQL_DATABASE: typecho
       MYSQL_USER: typecho
       MYSQL_PASSWORD: 123456
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
   typecho_phpfpm:
     image: liwl1iwl/typecho_phpfpm
     deploy:
-      replicas: 1
-
-  typecho_nginx:
-    image: liwl1iwl/typecho_nginx
-    depends_on:
-      - typecho_phpfpm
-      - typecho_db
-    ports:
-      - "80:80"
-      - "443:443"
-    deploy:
-      replicas: 1
+      replicas: 2
 
 volumes:
   db-data:
